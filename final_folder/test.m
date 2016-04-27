@@ -1,4 +1,4 @@
-function  featureVector=test( img )
+function  [featureVector,I,img_cut,add,polar_array,J,gaborArrayout]=test( img )
 %TEST Summary of this function goes here
 %集大成版
 %   Detailed explanation goes here
@@ -16,13 +16,14 @@ BW_out=im2bw(I,0.65);  %二值化得到清晰边缘
 edge_out=canny_out_BW(BW_out);
 [hough_space_out,hough_circle_out,para_out] = SHT(edge_out,1,0.05,100,140,1);  %参数设定原因是直观获得（最大元最小元半径设定）
 [pline_x_out,pline_y_out]=recreatcurve(para_out,I);
+add={pline_x_out,pline_y_out,pline_x_in,pline_y_in};
 
-imshow(I);
-title('截取圆环')
- hold on;
- plot(pline_y_in,pline_x_in,'.');
- hold on;
- plot(pline_y_out,pline_x_out,'.');
+% imshow(I);
+% title('截取圆环')
+%  hold on;
+%  plot(pline_y_in,pline_x_in,'.');
+%  hold on;
+%  plot(pline_y_out,pline_x_out,'.');
  
  img_cut=wipeout(img,para_in,para_out);   %截除虹膜图像
 %  imshow(img_cut); 
@@ -34,6 +35,7 @@ title('截取圆环')
 %  imshow(J);
 
  gaborArray = gaborFilterBank(5,8,39,39);
+ gaborArrayout=gaborArray(4);
  featureVector = gaborFeatures(J,gaborArray,4,4);
 
 
